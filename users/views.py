@@ -1,59 +1,82 @@
 from rest_framework import viewsets
-from .models import CustomUser
-from .serializers import CustomUserSerializer
-from rest_framework.authtoken.models import Token
-from django.shortcuts import get_object_or_404
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
+from .models import CustomUser
+from .serializers import CustomUserSerializer, LoginSerializer
 
-# Create your views here.
-
-# Login view
-class LoginView(viewsets.ModelViewSet):
+class AuthViewSet(viewsets.GenericViewSet):
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-
-    def create(self, request, *args, **kwargs):
-        user = get_object_or_404(CustomUser, username=request.data['username'])
-
-        if not user.check_password(request.data['password']):
-            return Response({'error': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        if not user.is_active:
-            return Response({'error': 'User is not active'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        # user = serializer.validated_data['user']
-        
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.id,
-            'username': user.username
-        }, status=status.HTTP_200_OK)
-
-
-# Signup view
-class SignupView(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-
-    def create(self, request, *args, **kwargs):
-        # check if user exists
-        user = CustomUser.objects.filter(email=request.data['email']).first()
-        if user:
-            return Response({'error': 'User already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.id,
-            'username': user.username
-        }, status=status.HTTP_201_CREATED)
-        
     
+    def get_serializer_class(self):
+        if self.action == 'login':
+            return LoginSerializer
+        return CustomUserSerializer
 
+    @action(detail=False, methods=['post'])
+    def login(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        user = authenticate(
+            username=serializer.validated_data['username'],
+            password=serializer.validated_data['password']
+        )
+        
+        if not user:
+            return Response(
+                {'error': 'Invalid credentials'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        token, _ = Token.objects.get_or_create(user=user)
+        
+        return Response({
+            'token': token.key,
+            'user_id': user.id,
+            'username': user.username,
+            'is_employer': user.is_employer,
+            'is_applicant': user.is_applicant,
+            'email': user.email
+        })
+
+    @action(detail=False, methods=['post'])
+    def signup(self, request):
+        serializer = CustomUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Check if user exists
+        if CustomUser.objects.filter(email=serializer.validated_data['email']).exists():
+            return Response(
+                {'error': 'User with this email already exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = serializer.save()
+        token, _ = Token.objects.get_or_create(user=user)
+        
+        return Response({
+            'token': token.key,
+            'user_id': user.id,
+            'username': user.username,
+            'is_employer': user.is_employer,
+            'is_applicant': user.is_applicant,
+            'email': user.email
+        }, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['put', 'patch'])
+    def update_profile(self, request, pk=None):
+        user = self.get_object()
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        updated_user = serializer.save()
+        
+        return Response({
+            'user_id': updated_user.id,
+            'username': updated_user.username,
+            'is_employer': updated_user.is_employer,
+            'is_applicant': updated_user.is_applicant,
+            'email': updated_user.email
+        })

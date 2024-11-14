@@ -4,7 +4,7 @@ from django.db import models
 class EmployerProfile(models.Model):
     company_name = models.CharField(max_length=100)
     company_description = models.TextField()
-    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, null=True, blank=True)
     contact_email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

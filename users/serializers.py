@@ -2,25 +2,51 @@ from rest_framework import serializers
 from .models import CustomUser
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
+    
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'is_employer', 'is_applicant']
+        fields = ['id', 'username', 'email', 'password', 'is_employer', 'is_applicant']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'is_employer': {'required': True},
+            'is_applicant': {'required': True},
+        }
 
+    def validate(self, data):
+        # Ensure user can't be both employer and applicant
+        if data.get('is_employer') and data.get('is_applicant'):
+            raise serializers.ValidationError(
+                "User cannot be both employer and applicant"
+            )
+        # Ensure user must be either employer or applicant
+        if not data.get('is_employer') and not data.get('is_applicant'):
+            raise serializers.ValidationError(
+                "User must be either employer or applicant"
+            )
+        return data
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(**validated_data)
+        password = validated_data.pop('password', None)
+        user = CustomUser.objects.create(**validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
         return user
     
     def update(self, instance, validated_data):
-        instance.username = validated_data.get('username', instance.username)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
-        instance.is_employer = validated_data.get('is_employer', instance.is_employer)
-        instance.is_applicant = validated_data.get('is_applicant', instance.is_applicant)
+        password = validated_data.pop('password', None)
+        
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
 
-        if 'password' in validated_data:
-            instance.set_password(validated_data['password'])
+        if password:
+            instance.set_password(password)
             
         instance.save()
         return instance
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, write_only=True)

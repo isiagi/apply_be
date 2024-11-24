@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-rpjt489cy#g@t5j44l!02-thprg+2njx2(2)4b9m@w#u3vj=gc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['4120-197-239-12-230.ngrok-free.app', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -55,6 +55,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
 
 ROOT_URLCONF = 'server.urls'
 

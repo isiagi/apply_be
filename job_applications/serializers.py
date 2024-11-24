@@ -5,3 +5,5 @@ class JobApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobApplication
         fields = '__all__'
+
+        depth = 1

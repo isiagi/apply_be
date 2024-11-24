@@ -80,3 +80,9 @@ class AuthViewSet(viewsets.GenericViewSet):
             'is_applicant': updated_user.is_applicant,
             'email': updated_user.email
         })
+    
+    # logout
+    @action(detail=False, methods=['post'])
+    def logout(self, request):
+        request.user.auth_token.delete()
+        return Response({'message': 'Logged out successfully'})

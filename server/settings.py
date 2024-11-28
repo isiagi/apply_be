@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'applicant_profiles',
     'job_applications',
     'timer',
+    'education',
+    'employment_history',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,75 @@
+services:
+  # Web Service - Django Backend
+  - type: web
+    name: django-web-service
+    env: docker
+    region: oregon
+    plan: free
+    dockerfilePath: Dockerfile
+    dockerCommand: python manage.py runserver 0.0.0.0:8000
+    branch: main
+    healthCheckPath: /admin/login/
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: server.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: your-domain.onrender.com
+      - key: REDIS_HOST
+        fromService:
+          name: redis-service
+          type: redis
+          property: host
+
+  # Celery Worker Service
+  - type: worker
+    name: celery-worker
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerCommand: celery -A server worker -l info
+    branch: main
+    envVars:
+      - key: REDIS_HOST
+        fromService:
+          name: redis-service
+          type: redis
+          property: host
+
+  # Celery Beat Service
+  - type: worker
+    name: celery-beat
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerCommand: celery -A server beat -l info
+    branch: main
+    envVars:
+      - key: REDIS_HOST
+        fromService:
+          name: redis-service
+          type: redis
+          property: host
+
+  # Redis Service
+  - type: redis
+    name: redis-service
+    ipAllowList: 
+      - 0.0.0.0/0  # Be cautious with this in production
+    plan: starter
+
+environments:
+  production:
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: server.settings.production
+      - key: DEBUG
+        value: false
+
+  staging:
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: server.settings.staging
+      - key: DEBUG
+        value: true

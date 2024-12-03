@@ -1,5 +1,4 @@
 services:
-  # Combined Django Web, Celery Worker, and Celery Beat Service
   - type: web
     name: django-web-service
     env: docker
@@ -7,9 +6,7 @@ services:
     plan: free
     dockerfilePath: Dockerfile
     dockerCommand: >
-      sh -c "celery -A server beat -l info & 
-             celery -A server worker -l info & 
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "celery -A server beat -l info & celery -A server worker -l info & python manage.py runserver 0.0.0.0:8000"
     branch: main
     healthCheckPath: /admin/login/
     envVars:
@@ -20,6 +17,6 @@ services:
       - key: DEBUG
         value: false
       - key: ALLOWED_HOSTS
-        value: your-domain.onrender.com
+        value: django-web-service-mvlg.onrender.com
       - key: REDIS_URL
         value: redis://default:AV2QAAIjcDExNDJjNmRjOThkZmQ0NTRiYmM1MDg3NTkzYTk3ZjA5N3AxMA@huge-asp-23952.upstash.io:6379

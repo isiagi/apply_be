@@ -55,17 +55,17 @@ services:
   # Redis Service
   - type: redis
     name: redis-service
-    ipAllowList: 
-      - 0.0.0.0/0  # Be cautious with this in production
-    plan: starter
+    # ipAllowList: 
+    #   - 0.0.0.0/0  # Be cautious with this in production
+    plan: free
 
-environments:
-  production:
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: server.settings.production
-      - key: DEBUG
-        value: false
+  environments:
+    production:
+      envVars:
+        - key: DJANGO_SETTINGS_MODULE
+          value: server.settings.production
+        - key: DEBUG
+          value: false
 
   staging:
     envVars:

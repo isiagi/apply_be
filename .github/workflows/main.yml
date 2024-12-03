@@ -1,0 +1,14 @@
+name: Keep Server Alive
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # This will trigger every 5 minutes (you can adjust this)
+
+jobs:
+  keep-server-alive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make an HTTP request to the server to keep it alive
+        run: |
+          curl -f https://apply-be.onrender.com

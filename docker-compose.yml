@@ -1,4 +1,3 @@
-# docker-compose.yml
 version: '3.8'
 
 services:
@@ -10,7 +9,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - REDIS_URL=redis://default:AV2QAAIjcDExNDJjNmRjOThkZmQ0NTRiYmM1MDg3NTkzYTk3ZjA5N3AxMA@huge-asp-23952.upstash.io:6379
+      - REDIS_URL="redis://default:AV2QAAIjcDExNDJjNmRjOThkZmQ0NTRiYmM1MDg3NTkzYTk3ZjA5N3AxMA@huge-asp-23952.upstash.io:6379"
       - DJANGO_SETTINGS_MODULE=server.settings
 
   celery:
@@ -19,7 +18,7 @@ services:
     volumes:
       - .:/app
     environment:
-      - REDIS_URL=redis://default:AV2QAAIjcDExNDJjNmRjOThkZmQ0NTRiYmM1MDg3NTkzYTk3ZjA5N3AxMA@huge-asp-23952.upstash.io:6379
+      - REDIS_URL="redis://default:AV2QAAIjcDExNDJjNmRjOThkZmQ0NTRiYmM1MDg3NTkzYTk3ZjA5N3AxMA@huge-asp-23952.upstash.io:6379"
 
   celery-beat:
     build: .
@@ -27,4 +26,4 @@ services:
     volumes:
       - .:/app
     environment:
-      - REDIS_URL=redis://default:AV2QAAIjcDExNDJjNmRjOThkZmQ0NTRiYmM1MDg3NTkzYTk3ZjA5N3AxMA@huge-asp-23952.upstash.io:6379
+      - REDIS_URL="redis://default:AV2QAAIjcDExNDJjNmRjOThkZmQ0NTRiYmM1MDg3NTkzYTk3ZjA5N3AxMA@huge-asp-23952.upstash.io:6379"

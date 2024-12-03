@@ -1,4 +1,5 @@
 services:
+  # Django Web Service
   - type: web
     name: django-web-service
     env: docker

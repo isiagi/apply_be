@@ -59,17 +59,17 @@ services:
     #   - 0.0.0.0/0  # Be cautious with this in production
     plan: free
 
-  environments:
-    production:
-      envVars:
-        - key: DJANGO_SETTINGS_MODULE
-          value: server.settings.production
-        - key: DEBUG
-          value: false
+  # environments:
+  #   production:
+  #     envVars:
+  #       - key: DJANGO_SETTINGS_MODULE
+  #         value: server.settings.production
+  #       - key: DEBUG
+  #         value: false
 
-  staging:
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: server.settings.staging
-      - key: DEBUG
-        value: true
+  # staging:
+  #   envVars:
+  #     - key: DJANGO_SETTINGS_MODULE
+  #       value: server.settings.staging
+  #     - key: DEBUG
+  #       value: true

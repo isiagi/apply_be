@@ -53,11 +53,11 @@ services:
           property: host
 
   # Redis Service
-  - type: redis
-    name: redis-service
-    ipAllowList: 
-      - "10.0.0.0/24"  # Be cautious with this in production
-    plan: free
+  # - type: redis
+  #   name: redis-service
+  #   ipAllowList: 
+  #     - "10.0.0.0/24"  # Be cautious with this in production
+  #   plan: free
 
   # environments:
   #   production:

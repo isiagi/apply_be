@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-rpjt489cy#g@t5j44l!02-thprg+2njx2(2)4b9m@w#u3vj=gc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['4120-197-239-12-230.ngrok-free.app', 'localhost', '127.0.0.1', 'apply-be.onrender.com']
+ALLOWED_HOSTS = ['f2d4-197-239-14-166.ngrok-free.app', 'localhost', '127.0.0.1', 'apply-be.onrender.com']
 
 
 
@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'employer_profiles',
     'applicant_profiles',
     'job_applications',
+    'timer',
+    'education',
+    'employment_history',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +112,24 @@ env_file = os.path.join(BASE_DIR, ".env")
 
 # Load environment variables from the .env file (if it exists)
 env.read_env(env_file)
+
+REDIS_URL = os.environ.get('REDIS_URL', 'rediss://default:YOUR_PASSWORD@huge-asp-23952.upstash.io:6379')
+
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
+# CELERY_BROKER_URL = f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:6379/0"
+# CELERY_RESULT_BACKEND = f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:6379/0"
+CELERY_BEAT_SCHEDULE = {
+    'task-every-14-minutes': {
+        'task': 'timer.tasks.your_scheduled_task',
+        'schedule': 14 * 60  # 14 minutes in seconds
+    },
+}
 
 
 import dj_database_url

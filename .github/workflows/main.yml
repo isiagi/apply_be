@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Make an HTTP request to the server to keep it alive
         run: |
-          curl -f https://apply-be.onrender.com
+          curl -f https://apply-be.onrender.com/api/job_listings/jobs/

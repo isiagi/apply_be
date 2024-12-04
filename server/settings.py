@@ -131,6 +131,9 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+MEDIA_URL = '/mediafiles/'
+
 
 import dj_database_url
 

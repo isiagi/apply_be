@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .models import CustomUser
 from .serializers import CustomUserSerializer, LoginSerializer
+from employer_profiles.models import EmployerProfile
 
 class AuthViewSet(viewsets.GenericViewSet):
     queryset = CustomUser.objects.all()
@@ -53,6 +54,13 @@ class AuthViewSet(viewsets.GenericViewSet):
                 {'error': 'User with this email already exists'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+        # If is_employer is True, is_applicant should be False, create employer profile
+        # if serializer.validated_data['is_employer']:
+        #     # serializer.validated_data['is_applicant'] = False
+        #     # create employer profile
+        #     EmployerProfile.objects.create(user=serializer.save())
+
 
         user = serializer.save()
         token, _ = Token.objects.get_or_create(user=user)

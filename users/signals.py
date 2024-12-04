@@ -8,18 +8,22 @@ from applicant_profiles.models import ApplicantProfile
 User = get_user_model()
 
 @receiver(post_save, sender=User)
-def create_employer_profile(sender, instance, created, **kwargs):
+def create_user_profiles(sender, instance, created, **kwargs):
     """
-    Signal to create an employer profile automatically when an employer user is created.
+    Signal to create profiles automatically based on user type.
     
     :param sender: The model class sending the signal (User model)
     :param instance: The actual instance of the User being saved
     :param created: Boolean indicating if this is a new user creation
     """
-    # Only create profile if:
-    # 1. This is a new user creation
-    # 2. The user is marked as an employer
-    if created and instance.is_employer:
-        EmployerProfile.objects.create(user=instance)
-    else:
-        ApplicantProfile.objects.create(user=instance)
+    # Only create profiles if this is a new user creation
+    if created:
+        # If user is an employer, create employer profile
+        if instance.is_employer:
+            print("Creating Employer Profile", instance)
+            EmployerProfile.objects.create(user=instance)
+        
+        # If user is an applicant, create applicant profile
+        elif instance.is_applicant:
+            print("Creating Applicant Profile", instance)
+            ApplicantProfile.objects.create(user=instance)

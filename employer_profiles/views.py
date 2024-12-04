@@ -10,6 +10,10 @@ class EmployerProfileViewSet(viewsets.ModelViewSet):
     serializer_class = EmployerProfileSerializer
     permission_classes = [IsAuthenticated]
 
+    # Get the currently authenticated user
+    def get_queryset(self):
+        return EmployerProfile.objects.filter(user=self.request.user)
+
     def perform_create(self, serializer):
         # Only user employers can create employer profiles
         if not self.request.user.is_employer:

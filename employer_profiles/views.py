@@ -3,6 +3,8 @@ from .models import EmployerProfile
 from .serializers import EmployerProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 class EmployerProfileViewSet(viewsets.ModelViewSet):
@@ -24,4 +26,14 @@ class EmployerProfileViewSet(viewsets.ModelViewSet):
     # Update currently authenticated user's employer profile
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
+
+    
+    # Delete currently authenticated user's employer profile
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user == request.user:
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
     

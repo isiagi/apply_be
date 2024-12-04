@@ -2,7 +2,7 @@ name: Keep Server Alive
 
 on:
   schedule:
-    - cron: '*/1 * * * *'  # This will trigger every 5 minutes (you can adjust this)
+    - cron: '*/14 * * * *'  # This will trigger every 14 minutes (you can adjust this)
 
 jobs:
   keep-server-alive:
@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Make an HTTP request to the server to keep it alive
         run: |
-          curl -f https://apply-be.onrender.com/api/job_listings/jobs/
+          curl -f https://apply-be.onrender.com/api/alive/alive/

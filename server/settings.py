@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'timer',
     'education',
     'employment_history',
+    'alive',
 ]
 
 MIDDLEWARE = [

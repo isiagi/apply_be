@@ -3,6 +3,8 @@ from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from employer_profiles.models import EmployerProfile
 from applicant_profiles.models import ApplicantProfile
+from employment_history.models import EmploymentHistory
+from education.models import Education
 
 # Get the custom user model
 User = get_user_model()
@@ -27,3 +29,6 @@ def create_user_profiles(sender, instance, created, **kwargs):
         elif instance.is_applicant:
             print("Creating Applicant Profile", instance)
             ApplicantProfile.objects.create(user=instance)
+            EmploymentHistory.objects.create(user=instance)
+            Education.objects.create(user=instance)
+    

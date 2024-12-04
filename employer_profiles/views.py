@@ -21,4 +21,7 @@ class EmployerProfileViewSet(viewsets.ModelViewSet):
         # Set the user field to the currently authenticated user
         serializer.save(user=self.request.user)
 
+    # Update currently authenticated user's employer profile
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
     

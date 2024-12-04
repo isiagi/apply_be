@@ -13,3 +13,7 @@ class ApplicantProfileViewSet(viewsets.ModelViewSet):
     # Get the current user's profile
     def get_queryset(self):
         return ApplicantProfile.objects.filter(user=self.request.user)
+    
+    # Update the current user's profile
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)

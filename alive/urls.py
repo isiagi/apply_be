@@ -3,6 +3,6 @@ from django.urls import path
 from . import views
 
 router = routers.DefaultRouter()
-router.register('alive', views.PingView)
+router.register('alivez', views.PingView, basename='alive')
 
 urlpatterns = router.urls

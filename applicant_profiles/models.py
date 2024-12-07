@@ -17,4 +17,4 @@ class ApplicantProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.resume_url
+        return str(self.id)  # Guaranteed to always return a string

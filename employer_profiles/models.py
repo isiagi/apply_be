@@ -15,4 +15,4 @@ class EmployerProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.company_name
+        return str(self.id)

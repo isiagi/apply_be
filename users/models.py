@@ -10,7 +10,12 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-    # def __str__(self):
-    #     return self.username
+    def __str__(self):
+        if self.username:
+            return str(self.username)
+        elif self.email:
+            return str(self.email)
+        return f"User {str(self.id)}"
+
 
 

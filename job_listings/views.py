@@ -22,6 +22,7 @@ class JobViewSet(viewsets.ModelViewSet):
     # Get id of user when creating a job and insert into job object
 
     def perform_create(self, serializer):
+        print(self.request.user)
         serializer.save(recuiter_id=self.request.user)
 
     # Get id of user when updating a job and insert into job object

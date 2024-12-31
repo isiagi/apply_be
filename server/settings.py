@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-rpjt489cy#g@t5j44l!02-thprg+2njx2(2)4b9m@w#u3vj=gc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['792c-41-210-147-71.ngrok-free.app', 'localhost', '127.0.0.1', 'apply-be.onrender.com']
+ALLOWED_HOSTS = ['d20e-197-239-11-58.ngrok-free.app', 'localhost', '127.0.0.1', 'apply-be.onrender.com']
 
 
 
@@ -142,7 +142,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=env("DATABASE_URL"),
         conn_max_age=env("CONN_MAX_AGE", cast=int),
-        # ssl_require=env("SSL_REQUIRE", cast=bool),
+        ssl_require=env("SSL_REQUIRE", cast=bool),
         conn_health_checks=env("CONN_HEALTH_CHECKS", cast=bool),
     )
 }

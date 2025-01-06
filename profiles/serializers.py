@@ -49,7 +49,7 @@ class ApplicantProfileSerializer(serializers.ModelSerializer):
     education_entries = EducationSerializer(many=True, read_only=True)
     class Meta:
         model = ApplicantProfile
-        fields = ('profile_image', 'user', 'bio', 'skills', 'experience_years', 'education_entries',
+        fields = ('id', 'profile_image', 'user', 'bio', 'skills', 'experience_years', 'education_entries',
                  'resume', 'current_position', 'location', 'created_at', 'updated_at')
         read_only_fields = ('created_at', 'updated_at')
 

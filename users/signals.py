@@ -28,7 +28,7 @@ def create_user_profiles(sender, instance, created, **kwargs):
         # If user is an applicant, create applicant profile
         elif instance.is_applicant:
             print("Creating Applicant Profile", instance)
-            ApplicantProfile.objects.create(user=instance)
-            EmploymentHistory.objects.create(user=instance)
-            Education.objects.create(user=instance)
+            profile = ApplicantProfile.objects.create(user=instance)
+            # EmploymentHistory.objects.create(profile=profile)
+            # Education.objects.create(profile=profile)
     

@@ -35,7 +35,7 @@ class ApplicantProfile(models.Model):
     bio = models.TextField(blank=True)
     skills = models.JSONField(default=list, blank=True)
     experience_years = models.PositiveIntegerField(default=0)
-    education = None
+    education = models.JSONField(default=list, blank=True)
     resume = models.FileField(
         upload_to='resumes/',
         validators=[FileExtensionValidator(['pdf', 'doc', 'docx'])],

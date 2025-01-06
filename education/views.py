@@ -12,13 +12,13 @@ class EducationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(profile=self.request.user)
 
     def perform_update(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(profile=self.request.user)
 
     def get_queryset(self):
-        return Education.objects.filter(user=self.request.user)
+        return Education.objects.filter(profile=self.request.user)
     
     # Delete authenticated user's education
     def destroy(self, request, *args, **kwargs):
